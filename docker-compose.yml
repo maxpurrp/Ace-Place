@@ -1,0 +1,33 @@
+version: "3.8"
+
+services:
+  fastapi:
+    build: .
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+    volumes:
+      - ./:/usr/src/app
+    ports:
+      - 8000:8000
+    depends_on:
+      - mongo
+    environment:
+    - PORT='Your information'
+    - EMAIL='Your information'
+    - DB_URI='Your information'
+    - SMTP_HOST='Your information'
+    - SMTP_PORT='Your information'
+    - SMTP_LOGIN='Your information'
+    - SMTP_PASSWORD='Your information'
+    - SMTP_EMAIL='Your information'
+    - SMTP_NAME='Your information'
+
+
+  mongo:
+    ports:
+    - '27017:27017'
+    container_name: 'mongodb'
+    restart: always
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=max
+      - MONGO_INITDB_ROOT_PASSWORD=1234
+    image: mongo
