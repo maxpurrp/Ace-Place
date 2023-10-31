@@ -1,22 +1,32 @@
+import os
 from pymongo import MongoClient, errors
 from .models import Notification, ReadNotify, Listing
 from .send_email import send_email
 import logging
 
 
+def get_notification(notifications, limit, skip):
+    result = []
+    if skip >= len(notifications) or limit == 0:
+        return None
+    for notification in notifications[skip:]:
+        result.append(notification)
+        if len(result) == limit:
+            return result
+    return result
+
+
 class Database:
     def __init__(self) -> None:
-        self.client = MongoClient('mongodb://max:1234@mongodb:27017/')
+        self.client = MongoClient(os.getenv('DB_URI'))
         self.db = self.client['Users']
         self.logger = logging.getLogger()
 
     def create(self, data: Notification):
         if data['key'] == 'registration':
             if data['data']['key']:
-                send_email(data['data']['key'], data['user_id'])
-            else:
-                send_email(data['key'], data['user_id'])
-            return True
+                return send_email(data['data']['key'], data['user_id'])
+            return send_email(data['key'], data['user_id'])
         if data['key'] == 'new_login':
             if data['data']['key']:
                 send_email(data['data']['key'], data['user_id'])
@@ -38,7 +48,7 @@ class Database:
             filt = {'_id': data['user_id']}
             new_value = {"$push": {'data': data['data']}}
             self.db[data['user_id']].update_one(filt, new_value)
-        return True
+            return True
 
     def listing_notify(self, info: Listing):
         all_notification = []
