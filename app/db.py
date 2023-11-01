@@ -1,7 +1,7 @@
 import os
 from pymongo import MongoClient, errors
 from .models import Notification, ReadNotify, Listing
-from .send_email import send_email
+from .send_email import Sender
 import logging
 
 
@@ -20,18 +20,19 @@ class Database:
     def __init__(self) -> None:
         self.client = MongoClient(os.getenv('DB_URI'))
         self.db = self.client['Users']
+        self.sender = Sender()
         self.logger = logging.getLogger()
 
     def create(self, data: Notification):
         if data['key'] == 'registration':
             if data['data']['key']:
-                return send_email(data['data']['key'], data['user_id'])
-            return send_email(data['key'], data['user_id'])
+                return self.sender.send_email(data['data']['key'], data['user_id'])
+            return self.sender.send_email(data['key'], data['user_id'])
         if data['key'] == 'new_login':
             if data['data']['key']:
-                send_email(data['data']['key'], data['user_id'])
+                self.sender.send_email(data['data']['key'], data['user_id'])
             else:
-                send_email(data['key'], data['user_id'])
+                self.sender.send_email(data['key'], data['user_id'])
         try:
             count = self.db[data['user_id']].find()
             if len(self.db.list_collection_names()) != 0:
@@ -42,6 +43,7 @@ class Database:
                                                  'target_id': data['target_id'],
                                                  'key': data['key'],
                                                  'data': [data['data']]})
+            return True
 
         except errors.DuplicateKeyError:
             self.logger.warning(f'{data["user_id"]} already exists')

@@ -11,7 +11,6 @@ services:
     depends_on:
       - mongo
     environment:
-    - PORT='Your information'
     - EMAIL='Your information'
     - DB_URI='Your information'
     - SMTP_HOST='Your information'

@@ -34,9 +34,9 @@ class Router:
         result = self.db.listing_notify(info)
         if result == False:
             return {'success': result}
-        all_notification, new, result = result
+        all_notification, new, res = result
         output_info = {
-                'success': result,
+                'success': res,
                 'data': {
                     'elements': len(all_notification),
                     'new': new,

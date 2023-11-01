@@ -1,19 +1,28 @@
 import os
 import smtplib
+import logging
 
 
-def send_email(key, to):
-    text = f'Hello! You have Notification with message: {key}'
-    subj = 'Sender Notifications'
-    body = "\r\n".join((f"From: {os.getenv('SMTP_LOGIN')}", f"To: {to}", f"Subject: {subj}", 'MIME-Version: 1.0', 'Content-Type: text/plain; charset=utf-8', "", text))
-    try:
-        smtp = smtplib.SMTP(os.getenv('SMTP_HOST'), os.getenv('SMTP_PORT'))
-        smtp.starttls()
-        smtp.ehlo()
-        smtp.login(os.getenv('SMTP_LOGIN'), os.getenv('SMTP_PASSWORD'))
-        smtp.sendmail(os.getenv('SMTP_LOGIN'), to, body.encode('utf-8'))
-        print('succesfuly send')
-    except smtplib.SMTPException as e:
-        print(e)
-    finally:
-        smtp.quit()
+class Sender:
+    def __init__(self) -> None:
+        self.logger = logging.getLogger()
+        self.login = os.getenv('SMTP_LOGIN')
+        self.password = os.getenv('SMTP_PASSWORD')
+        self.host = os.getenv('SMTP_HOST')
+        self.port = os.getenv('SMTP_PORT')
+        self.subj = 'Sender Notifications'
+
+    def send_email(self, key, dest):
+        text = f'Hello! You have Notification with message: {key}'
+        body = "\r\n".join((f"From: {self.login}", f"To: {dest}", f"Subject: {self.subj}", 'MIME-Version: 1.0', 'Content-Type: text/plain; charset=utf-8', "", text))
+        try:
+            smtp = smtplib.SMTP(self.host, self.port)
+            smtp.starttls()
+            smtp.ehlo()
+            smtp.login(self.login, self.password)
+            smtp.sendmail(self.login, dest, body.encode('utf-8'))
+            self.logger.info('Send Succusefuly')
+        except smtplib.SMTPException as e:
+            self.logger.warning(f'current mistake is {e}')
+        finally:
+            smtp.quit()
