@@ -106,13 +106,13 @@
 1. git clone https://github.com/maxpurrp/Ace-Place
 2. cd Ace-Place
 3. Настройте переменные окружения в файле ```docker-compose.yml``` в разделах ```environment```
-    1. DB_URI - строка для подключения к mongoDB
-    2. SMTP_HOST - хост smtp сервера
-    3. SMTP_PORT - порт smtp сервера
-    4. SMTP_LOGIN - логин пользователя
-    5. SMTP_PASSWORD - пароль пользователя
-    6. SMTP_EMAIL - email с которого будет отправлено сообщение
-    7. MONGO_INITDB_ROOT_USERNAME -     Логин для базы данных
-    8. MONGO_INITDB_ROOT_PASSWORD - пароль для базы данных
+    - DB_URI - строка для подключения к mongoDB
+    - SMTP_HOST - хост smtp сервера
+    - SMTP_PORT - порт smtp сервера
+    - SMTP_LOGIN - логин пользователя
+    - SMTP_PASSWORD - пароль пользователя
+    - SMTP_EMAIL - email с которого будет отправлено сообщение
+    - MONGO_INITDB_ROOT_USERNAME -     Логин для базы данных
+    - MONGO_INITDB_ROOT_PASSWORD - пароль для базы данных
 4. docker-compose up -d
 5. Отправьте запросы используя вышеуказанные примеры для тестирования с помощью Postman или другое используемое вами приложение.
