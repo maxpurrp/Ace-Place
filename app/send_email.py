@@ -21,8 +21,8 @@ class Sender:
             smtp.ehlo()
             smtp.login(self.login, self.password)
             smtp.sendmail(self.login, dest, body.encode('utf-8'))
-            self.logger.info('Send Succusefuly')
+            self.logger.info('Email was sended succusefuly')
         except smtplib.SMTPException as e:
-            self.logger.warning(f'current mistake is {e}')
+            self.logger.warning(f'Email sending failing: {e}')
         finally:
             smtp.quit()

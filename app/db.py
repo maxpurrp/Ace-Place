@@ -51,6 +51,8 @@ class Database:
             new_value = {"$push": {'data': data['data']}}
             self.db[data['user_id']].update_one(filt, new_value)
             return True
+        except Exception as e:
+            self.logger.warning(f'Error occured while "create" request: {e}')
 
     def listing_notify(self, info: Listing):
         all_notification = []
@@ -66,7 +68,7 @@ class Database:
             else:
                 return False
         except Exception as e:
-            self.logger.error(e)
+            self.logger.error(f'Error occured while "list" query:{e}')
             return False
 
     def read_notify(self, read: ReadNotify):
@@ -81,5 +83,5 @@ class Database:
                         return True
             return False
         except Exception as e:
-            self.logger.error(e)
+            self.logger.error(f'Error occured while "read" query:{e}')
             return False

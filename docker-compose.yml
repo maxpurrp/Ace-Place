@@ -11,14 +11,12 @@ services:
     depends_on:
       - mongo
     environment:
-    - EMAIL='Your information'
     - DB_URI='Your information'
     - SMTP_HOST='Your information'
     - SMTP_PORT='Your information'
     - SMTP_LOGIN='Your information'
     - SMTP_PASSWORD='Your information'
     - SMTP_EMAIL='Your information'
-    - SMTP_NAME='Your information'
 
 
   mongo:
